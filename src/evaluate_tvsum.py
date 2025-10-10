@@ -51,15 +51,23 @@ def calculate_rank_correlation(video_scores, user_anno):
     kendall_scores = []
     avg_user_scores = np.mean(user_anno, axis=0)
 
+    # Normalize the user scores
     avg_user_scores = (avg_user_scores - avg_user_scores.min()) / (avg_user_scores.max() - avg_user_scores.min() + 1e-6)
+
+    # Ensure both video_scores and avg_user_scores are of the same length
+    min_len = min(len(video_scores), len(avg_user_scores))
+    video_scores = video_scores[:min_len]
+    avg_user_scores = avg_user_scores[:min_len]
 
     video_ranks = rankdata(video_scores)
     user_ranks = rankdata(avg_user_scores)
 
+    # Calculate Spearman and Kendall correlations
     spearman_corr, _ = spearmanr(video_scores, avg_user_scores)
     kendall_corr, _ = kendalltau(-video_ranks, -user_ranks)
 
     return spearman_corr, kendall_corr
+
 
 
 np.set_printoptions(threshold=np.inf)
