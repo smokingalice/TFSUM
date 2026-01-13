@@ -1,5 +1,5 @@
-# TF-SUM: Training-free Video Summarization via Language-based Hierarchical Scoring
-> **TF-SUM**  is an innovative video summarization framework that generates high-quality video summaries without any training or manual annotations. It fully leverages the capabilities of pre-trained Large Vision-Language Models (LVLMs) and Large Language Models (LLMs). Specifically, an LVLM is first used to generate textual descriptions for each video frame, with noisy captions filtered via cross-modal similarity. Then, an LLM performs hierarchical importance scoring based on the textual summaries to produce both frame-level and segment-level scores. Finally, visual similarity is used to remove redundant content and refine the importance distribution. **TF-SUM** demonstrates strong performance on two public benchmarks, TVSum and SumMe.
+# TF-SUM: Training-free Video Summarization via Language-centric Hierarchical Reasoning
+> **TF-SUM** is an innovative training-free video summarization framework designed to generate high-quality summaries without relying on any training data or manual annotations. It fully exploits the reasoning capabilities of pre-trained Large Vision-Language Models (LVLMs) and Large Language Models (LLMs). Specifically, an LVLM is first utilized to generate temporal-aware textual descriptions for video frames, where noisy captions are filtered via cross-modal similarity. Subsequently, an LLM performs hierarchical semantic reasoning on these textual summaries to infer both frame-level and segment-level importance scores. Finally, visual similarity mechanisms are applied to eliminate redundant content and refine the importance distribution. Extensive experiments demonstrate that TF-SUM achieves competitive performance compared to state-of-the-art methods.
 
 ## Hardware 
 - **GPUs**: 2 × NVIDIA Tesla V100-SXM2-32GB  
@@ -24,7 +24,7 @@ Set up the conda environment:
 
 ##  Datasets
 
-Download the **TVSum** and **SumMe** datasets:
+Download the TVSum and SumMe datasets:
 - **TVSum**: [https://opendatalab.com/OpenDataLab/TVSum/tree/main (https://opendatalab.com/OpenDataLab/TVSum)  
 - **SumMe**: [https://opendatalab.org.cn/OpenDataLab/SumMe] (https://opendatalab.org.cn/OpenDataLab/SumMe)
 
