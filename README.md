@@ -24,7 +24,7 @@ Set up the conda environment:
 
 ##  Datasets
 
-Download the TVSum and SumMe datasets:
+Download the TVSum and SumMe datasets(please refer to these examples for QFVS and VideoXum, as the operations are similar):
 - **TVSum**: [https://opendatalab.com/OpenDataLab/TVSum/tree/main] (https://opendatalab.com/OpenDataLab/TVSum)  
 - **SumMe**: [https://opendatalab.org.cn/OpenDataLab/SumMe] (https://opendatalab.org.cn/OpenDataLab/SumMe)
 
