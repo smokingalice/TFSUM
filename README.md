@@ -6,7 +6,7 @@
 - **CPU**: Standard compute node (details not specified)  
 - **CUDA Version**: 12.2  
 - **Operating System**: Ubuntu 20.04.5 LTS  
-> Note: TF-SUM is training-free, but efficient inference with LVLMs and LLMs requires GPUs with sufficient memory (24GB+ recommended).
+> Note: TF-SUM is training-free, but efficient inference with LVLMs and LLMs requires GPUs with sufficient memory (32GB+ recommended).
 
 ## Getting Started
 
