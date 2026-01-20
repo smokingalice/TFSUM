@@ -1,4 +1,4 @@
-# TF-SUM: Training-free Video Summarization via Language-centric Hierarchical Reasoning
+# TF-SUM: Training-free Video Summarization via Language-centric Reasoning
 > **TF-SUM** is an innovative training-free video summarization framework designed to generate high-quality summaries without relying on any training data or manual annotations. It fully exploits the reasoning capabilities of pre-trained Large Vision-Language Models (LVLMs) and Large Language Models (LLMs). Specifically, an LVLM is first utilized to generate temporal-aware textual descriptions for video frames, where noisy captions are filtered via cross-modal similarity. Subsequently, an LLM performs hierarchical semantic reasoning on these textual summaries to infer both frame-level and segment-level importance scores. Finally, visual similarity mechanisms are applied to eliminate redundant content and refine the importance distribution. Extensive experiments demonstrate that TF-SUM achieves competitive performance compared to state-of-the-art methods.
 
 ## Hardware 
