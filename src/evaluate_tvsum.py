@@ -1,3 +1,4 @@
+from scipy.stats import spearmanr, kendalltau, rankdata
 import argparse
 import json
 from pathlib import Path
@@ -41,18 +42,14 @@ def load_tvsum_mat(filename):
     return data_list
 
 
-from scipy.stats import spearmanr, kendalltau, rankdata
-
-from scipy.stats import spearmanr, kendalltau, rankdata
-
-
 def calculate_rank_correlation(video_scores, user_anno):
     spearman_scores = []
     kendall_scores = []
     avg_user_scores = np.mean(user_anno, axis=0)
 
     # Normalize the user scores
-    avg_user_scores = (avg_user_scores - avg_user_scores.min()) / (avg_user_scores.max() - avg_user_scores.min() + 1e-6)
+    avg_user_scores = (avg_user_scores - avg_user_scores.min()) / \
+        (avg_user_scores.max() - avg_user_scores.min() + 1e-6)
 
     # Ensure both video_scores and avg_user_scores are of the same length
     min_len = min(len(video_scores), len(avg_user_scores))
@@ -67,7 +64,6 @@ def calculate_rank_correlation(video_scores, user_anno):
     kendall_corr, _ = kendalltau(-video_ranks, -user_ranks)
 
     return spearman_corr, kendall_corr
-
 
 
 np.set_printoptions(threshold=np.inf)
@@ -111,7 +107,6 @@ def knapsack(values: Iterable[int], weights: Iterable[int], capacity: int) -> Li
         return []
 
 
-
 def load_reference_annotations(anno_file):
     annotations = {}
 
@@ -127,7 +122,6 @@ def load_reference_annotations(anno_file):
                 video_annotations[video_id] = []
             video_annotations[video_id].append(scores)
 
-
     for video_id, all_scores in video_annotations.items():
 
         scores_matrix = np.array(all_scores)
@@ -136,7 +130,6 @@ def load_reference_annotations(anno_file):
 
         normalized_scores = [(score - 1) / 4 for score in avg_scores]
         annotations[video_id] = normalized_scores
-
 
     return annotations
 
@@ -174,19 +167,23 @@ def calculate_weighted_scores(
         idx_str = str(frame_idx)
         if isinstance(scores_dict[frame_idx], dict):
             frame_scores = np.array(
-                [scores_dict[idx_str][str(nn_idx)] for nn_idx in range(num_neighbors)]
+                [scores_dict[idx_str][str(nn_idx)]
+                 for nn_idx in range(num_neighbors)]
             )
             frame_similarity = np.array(
-                [similarity_dict[idx_str][str(nn_idx)] for nn_idx in range(num_neighbors)]
+                [similarity_dict[idx_str][str(nn_idx)]
+                 for nn_idx in range(num_neighbors)]
             )
-            frame_weights = np.exp(frame_similarity) / np.sum(np.exp(frame_similarity))
+            frame_weights = np.exp(frame_similarity) / \
+                np.sum(np.exp(frame_similarity))
             refined_score = np.sum(frame_scores * frame_weights)
         else:
             refined_score = scores_dict[frame_idx]
 
         segment_idx = int(frame_idx) // frame_interval
         original_score = clean_caption_scores[segment_idx]
-        final_score = lambda_value * refined_score + (1 - lambda_value) * original_score
+        final_score = lambda_value * refined_score + \
+            (1 - lambda_value) * original_score
         scores.append(final_score)
 
     scores = np.repeat(scores, frame_interval)
@@ -208,7 +205,8 @@ def get_keyshot_summ(pred: np.ndarray,
     for seg_idx, (first, last) in enumerate(cps):
         scores = pred[first:last + 1]
         if scores.size == 0:
-            print(f"[Warning] Empty segment detected in video '{video_name}' at segment index {seg_idx} ({first}-{last}).")
+            print(
+                f"[Warning] Empty segment detected in video '{video_name}' at segment index {seg_idx} ({first}-{last}).")
         seg_scores[seg_idx] = int(1000 * scores.mean())
 
     limits = int(n_frames * proportion)
@@ -220,7 +218,6 @@ def get_keyshot_summ(pred: np.ndarray,
         summary[first:last + 1] = True
 
     return summary
-
 
 
 def main(
@@ -250,8 +247,8 @@ def main(
 
     annotations = load_reference_annotations(temporal_annotation_file)
 
-
-    video_list = [VideoRecord(x.strip().split(), root_path) for x in open(annotationfile_path)]
+    video_list = [VideoRecord(x.strip().split(), root_path)
+                  for x in open(annotationfile_path)]
 
     flat_scores = []
     flat_labels = []
@@ -264,7 +261,8 @@ def main(
         tvsum_data = load_tvsum_mat(tvsum_mat_file)
         user_anno = None
         raw_caption_scores_dir = Path(raw_caption_scores_dir)
-        clean_caption_scores_path = raw_caption_scores_dir / f"{video_name}.json"
+        clean_caption_scores_path = raw_caption_scores_dir / \
+            f"{video_name}.json"
         with open(clean_caption_scores_path) as f:
             clean_caption_scores_dict = json.load(f)
 
@@ -294,8 +292,8 @@ def main(
         with open(video_captions_path) as f:
             video_captions = json.load(f)
 
-
-        video_labels = get_video_labels(video, annotations, normal_label, video_fps)
+        video_labels = get_video_labels(
+            video, annotations, normal_label, video_fps)
 
         video_scores = calculate_weighted_scores(
             video_scores_dict,
@@ -309,7 +307,7 @@ def main(
 
         with h5py.File(file_path, 'r') as f:
             for name in f:
-                
+
                 sdate = f[name]["video_name"][...]
                 sdate = sdate.item().decode("utf-8").replace(" ", "_")
 
@@ -319,8 +317,8 @@ def main(
                     nfps = f[name]["n_frame_per_seg"][...]
                     user_sum = f[name]["user_summary"][...]
 
-
-            summary = get_keyshot_summ(video_scores, cps, video.num_frames, nfps, video_name=video_name)
+            summary = get_keyshot_summ(
+                video_scores, cps, video.num_frames, nfps, video_name=video_name)
 
             if summary.size > video.num_frames:
                 pred_summ = pred_summ[:video.num_frames]
@@ -331,7 +329,8 @@ def main(
 
             final_f1 = np.mean(f1s)
             finalF.append(final_f1)
-            spearman_corr, kendall_corr = calculate_rank_correlation(video_scores * 100, user_anno)
+            spearman_corr, kendall_corr = calculate_rank_correlation(
+                video_scores * 100, user_anno)
             spearman_all.append(spearman_corr)
             kendall_all.append(kendall_corr)
             print(
@@ -352,7 +351,6 @@ def main(
                     None,
                 )
 
-
     average_f1 = np.mean(finalF)
     average_spearman = np.mean(spearman_all)
     average_kendall = np.mean(kendall_all)
@@ -360,8 +358,6 @@ def main(
     print(f"Final F1 Score: {average_f1:.3f}")
     print(f"Final Spearman Correlation: {average_spearman:.3f}")
     print(f"Final Kendall Correlation: {average_kendall:.3f}")
-
-
 
 
 def parse_args():
@@ -391,7 +387,8 @@ def parse_args():
                         help="Path to the TVSum MATLAB annotation file (.mat)")
     args = parser.parse_args()
     if args.temporal_annotation_file is None and not args.without_labels:
-        parser.error("--temporal_annotation_file is required when --without_labels is not used")
+        parser.error(
+            "--temporal_annotation_file is required when --without_labels is not used")
     if args.visualize:
         if args.video_fps is None:
             parser.error("--video_fps is required when --visualize is used")
