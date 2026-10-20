@@ -24,9 +24,9 @@ Set up the conda environment:
 
 ##  Datasets
 
-Download the TVSum and SumMe datasets(please refer to these examples for other datasets, as the operations are similar):
-- **TVSum**: [https://opendatalab.com/OpenDataLab/TVSum/tree/main] (https://opendatalab.com/OpenDataLab/TVSum)  
-- **SumMe**: [https://opendatalab.org.cn/OpenDataLab/SumMe] (https://opendatalab.org.cn/OpenDataLab/SumMe)
+Download the TVSum and SumMe source videos and annotations:
+- **TVSum**: [Source videos and annotations](https://opendatalab.com/OpenDataLab/TVSum)  
+- **SumMe**: [Source videos and annotations](https://opendatalab.org.cn/OpenDataLab/SumMe)
 
 Organize the datasets as follows:
 
@@ -40,8 +40,10 @@ Organize the datasets as follows:
 
 Download the **preprocessed HDF5 annotation files**:
 
-- [eccv16_dataset_tvsum_google_pool5.h5](https://www.sendgb.com/upload/?utm_source=igjvxR46m5I) → place into `datasets/TVSum/annotations/`
-- [eccv16_dataset_summe_google_pool5.h5](https://www.sendgb.com/upload/?utm_source=igjvxR46m5I) → place into `datasets/SumMe/annotations/`
+The files below are hosted as GitHub Release assets and can be downloaded directly. Checksums are available in [SHA256SUMS.txt](https://github.com/smokingalice/TFSUM/releases/download/datasets-v1/SHA256SUMS.txt).
+
+- [eccv16_dataset_tvsum_google_pool5.h5](https://github.com/smokingalice/TFSUM/releases/download/datasets-v1/eccv16_dataset_tvsum_google_pool5.h5) → place into `datasets/TVSum/annotations/`
+- [eccv16_dataset_summe_google_pool5.h5](https://github.com/smokingalice/TFSUM/releases/download/datasets-v1/eccv16_dataset_summe_google_pool5.h5) → place into `datasets/SumMe/annotations/`
 ```
 datasets📁/
 ├── TVSum/
@@ -62,6 +64,13 @@ datasets📁/
 ```
 
 > Make sure the folder structure and filenames are correct, as the system relies on these paths for loading data.
+
+### QFVS and VideoXum
+
+| Dataset | Downloads |
+| --- | --- |
+| QFVS | [Annotations and query summaries (UniVTG mirror)](https://drive.google.com/drive/folders/18RpOVDrroY2gZ82ISObjAwWZz-i84XhD) · [Source videos (UT Egocentric)](https://vision.cs.utexas.edu/projects/egocentric_data/UT_Egocentric_Dataset.html) |
+| VideoXum | [Official annotations](https://huggingface.co/datasets/jylins/videoxum/tree/main) · [Source videos (ActivityNet Captions)](https://huggingface.co/datasets/Leyo/ActivityNet_Captions/tree/main) |
 
 ## Model Preparation
 The large language model used in this project is **LLaMA 2**, specifically the **llama-2-13b-chat** version.
